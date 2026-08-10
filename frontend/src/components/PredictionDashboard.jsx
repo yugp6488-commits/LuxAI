@@ -20,7 +20,8 @@ const PredictionDashboard = () => {
   const fetchPrediction = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:8000/predict', params);
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      const response = await axios.post(`${API_URL}/predict`, params);
       setPrediction(response.data);
     } catch (error) {
       console.error("Error fetching prediction:", error);
