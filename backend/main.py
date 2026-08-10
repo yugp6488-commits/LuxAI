@@ -17,8 +17,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-model = joblib.load("house_model.joblib")
-feature = joblib.load("house_features.joblib")
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(BASE_DIR, "house_model.joblib")
+feature_path = os.path.join(BASE_DIR, "house_features.joblib")
+
+model = joblib.load(model_path)
+feature = joblib.load(feature_path)
 
 class HouseFeatures(BaseModel):
     MedInc: float = Field(gt=0, description="Median Income of Neighbourhood")
