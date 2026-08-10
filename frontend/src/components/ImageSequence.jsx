@@ -37,21 +37,38 @@ const ImageSequence = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
+    let lastRenderedFrame = -1;
+    let renderRequested = false;
+
     const render = (index) => {
       const idx = Math.floor(index);
-      if (!images[idx] || !images[idx].complete) return;
-      const img = images[idx];
-      
-      const hRatio = canvas.width / img.width;
-      const vRatio = canvas.height / img.height;
-      const ratio = Math.max(hRatio, vRatio);
-      
-      const centerShift_x = (canvas.width - img.width * ratio) / 2;
-      const centerShift_y = (canvas.height - img.height * ratio) / 2;  
-      
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      context.drawImage(img, 0, 0, img.width, img.height,
-                         centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
+      // Skip drawing if we are already on this frame
+      if (idx === lastRenderedFrame) return; 
+      // Skip if a frame is already queued for the next paint
+      if (renderRequested) return;
+
+      renderRequested = true;
+      requestAnimationFrame(() => {
+        if (!images[idx] || !images[idx].complete) {
+          renderRequested = false;
+          return;
+        }
+        
+        const img = images[idx];
+        const hRatio = canvas.width / img.width;
+        const vRatio = canvas.height / img.height;
+        const ratio = Math.max(hRatio, vRatio);
+        
+        const centerShift_x = (canvas.width - img.width * ratio) / 2;
+        const centerShift_y = (canvas.height - img.height * ratio) / 2;  
+        
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(img, 0, 0, img.width, img.height,
+                           centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
+                           
+        lastRenderedFrame = idx;
+        renderRequested = false;
+      });
     };
 
     // Draw first frame once loaded

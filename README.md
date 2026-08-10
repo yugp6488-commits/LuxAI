@@ -1,4 +1,4 @@
-# LuxAI Project Pipeline 🚀
+# LuxAI Project Pipeline 🚀 - [Live Demo](http://lux-ai-vcfq.vercel.app/)
 
 Welcome to the LuxAI project repository! This project combines video frame processing with a Machine Learning pipeline to deliver a comprehensive AI-powered application. 
 
